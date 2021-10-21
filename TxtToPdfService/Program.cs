@@ -2,11 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TxtToPdfService
 {
@@ -32,7 +28,7 @@ namespace TxtToPdfService
                 {
                     services.AddLogging(config => config.AddSerilog(Log.Logger));
 
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<ConversorTxtToPdf>();
                 });
         
         public static IConfiguration InitConfiguration()
