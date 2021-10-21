@@ -1,33 +1,45 @@
-﻿using System.IO;
+﻿using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace TxtToPdfService
 {
     public class ArquivoTxt
     {
-        public string DiretorioEntrada { get; set; }
+        public static string DiretorioEntrada { get; set; }
         public string Titulo { get; set; }
         public string[] Texto { get; set; }
 
-        public ArquivoTxt(string diretorioEntrada)
+        //public ArquivoTxt(string diretorioEntrada)
+        //{
+        //    DiretorioEntrada = diretorioEntrada;
+        //}
+
+        public ArquivoTxt()
         {
-            DiretorioEntrada = diretorioEntrada;
         }
 
-        public string[] ColetaDiretorio()
+        public static string[] ColetaDiretorio()
         {
+            var config = InitConfiguration();
+            DiretorioEntrada = config.GetSection("Diretorio").GetSection("Caminhos").GetSection("RepositorioEntrada").Value;
             return Directory.GetFiles(DiretorioEntrada);
         }
 
         public void LerLinhasDoTxt(string file)
         {
+            Titulo = file.Replace(DiretorioEntrada, "");
             Texto = File.ReadAllLines(file);
-
         }
 
-        public bool DeletarArquivoTxt(string titulo)
+        #region Métodos Privados
+        private static IConfiguration InitConfiguration()
         {
-
-            return true;
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .Build();
+            return config;
         }
+        #endregion
     }
 }

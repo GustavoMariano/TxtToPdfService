@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +14,17 @@ namespace TxtToPdfService
             throw new System.NotImplementedException();
         }
 
-        public void GerarPdf(object texto)
-        {
+        internal void GerarPdf(ArquivoTxt arquivoTxt)
+        {            
+            Document doc = new();
+            PdfWriter.GetInstance(doc, new FileStream("pdf\\" + arquivoTxt.Titulo.Replace(".txt", ".pdf"), FileMode.Create));
 
+            doc.Open();
+
+            foreach (var linha in arquivoTxt.Texto)
+                doc.Add(new Paragraph(linha));
+
+            doc.Close();
         }
     }
 }
