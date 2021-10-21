@@ -9,11 +9,6 @@ namespace TxtToPdfService
         public string Titulo { get; set; }
         public string[] Texto { get; set; }
 
-        //public ArquivoTxt(string diretorioEntrada)
-        //{
-        //    DiretorioEntrada = diretorioEntrada;
-        //}
-
         public ArquivoTxt()
         {
         }
@@ -22,7 +17,7 @@ namespace TxtToPdfService
         {
             var config = InitConfiguration();
             DiretorioEntrada = config.GetSection("Diretorio").GetSection("Caminhos").GetSection("RepositorioEntrada").Value;
-            return Directory.GetFiles(DiretorioEntrada);
+            return Directory.GetFiles(DiretorioEntrada, "*.txt");
         }
 
         public void LerLinhasDoTxt(string file)
