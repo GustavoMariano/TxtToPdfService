@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,11 +21,12 @@ namespace TxtToPdfService
             PdfWriter.GetInstance(doc, new FileStream("pdf\\" + arquivoTxt.Titulo.Replace(".txt", ".pdf"), FileMode.Create));
 
             doc.Open();
-
             foreach (var linha in arquivoTxt.Texto)
                 doc.Add(new Paragraph(linha));
-
             doc.Close();
+
+            if (!Program.ArquivosTxtProcessados.TryDequeue(out arquivoTxt))
+                throw new Exception("Dequeue error");
         }
     }
 }

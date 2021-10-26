@@ -2,12 +2,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 
 namespace TxtToPdfService
 {
     public class Program
     {
+        public static ConcurrentQueue<ArquivoTxt> ArquivosTxtProcessados = new();
+        //public static List<ArquivoTxt> 
         public static void Main(string[] args)
         {
             var config = InitConfiguration();
@@ -28,7 +32,9 @@ namespace TxtToPdfService
                 {
                     services.AddLogging(config => config.AddSerilog(Log.Logger));
 
-                    services.AddHostedService<ConversorTxtToPdf>();
+                    services.AddHostedService<LeitorTxt>();
+                    //services.AddHostedService<DeletaTxt>();
+                    services.AddHostedService<EscrevePdf>();                    
                 });
         
         public static IConfiguration InitConfiguration()
